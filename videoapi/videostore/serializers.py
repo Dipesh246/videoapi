@@ -86,8 +86,7 @@ class VideoSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-  # username = serializers.CharField(max_length=100, write_only=True,style={'placeholder':'User Name'})
-  # password = serializers.CharField(max_length=100, write_only=True, style={'input_type':'password','placeholder':'Password'})
+  
 
   class Meta:
     model = User
@@ -98,3 +97,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     user = User.objects.create_user(validated_data['username'],validated_data['email'],validated_data['password'])
     return user
 
+class LogInSerializer(serializers.ModelSerializer):
+  username = serializers.CharField(max_length=100, write_only=True,style={'placeholder':'User Name'})
+  password = serializers.CharField(max_length=100, write_only=True, style={'input_type':'password','placeholder':'Password'})
+  class Meta:
+    model = User
+    fields = ['username','password']
