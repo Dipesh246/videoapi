@@ -1,4 +1,3 @@
-from dataclasses import field
 from rest_framework import serializers
 # from .models import UserRegister
 from .models import video
@@ -6,9 +5,14 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from moviepy.editor import VideoFileClip
 import os
+
+class VideoTestSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = video
+    fields = ["Video","video_discription", "video_name"]
 class VideoSerializer(serializers.ModelSerializer):
-  amount = serializers.DecimalField(max_digits=5,decimal_places=2, read_only=True)
-  additional_charges = serializers.DecimalField(max_digits=5, decimal_places=2, read_only=True)
+  amount = serializers.DecimalField(max_digits=5,decimal_places=2)
+  additional_charges = serializers.DecimalField(max_digits=5, decimal_places=2)
   class Meta:
     model = video
     fields = "__all__"
@@ -46,7 +50,10 @@ class VideoSerializer(serializers.ModelSerializer):
   #     raise ValidationError("User should be charged additional 20$")  
     
     #return value
+
+
   def validate(self, value):
+    
     video_size = value['Video'].size
     limit_byte_size = 1073741824
     video_type = value['Video'].name
@@ -75,7 +82,17 @@ class VideoSerializer(serializers.ModelSerializer):
     if(video_file_obj.duration>378 and value['additional_charges'] != 20):
       raise ValidationError("User should be charged additional 20$")
 
+    value.pop("amount")
+    value.pop("additional_charges")
     return super().validate(value)
+
+  def create(self, validated_data):
+    return super().create(validated_data)
+
+  def to_representation(self, instance):
+    print("ins: ", instance)
+    data  = VideoTestSerializer(instance)
+    return data.data
 
 # class UserSerializer(serializers.Serializer):
   

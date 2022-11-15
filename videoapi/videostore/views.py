@@ -28,7 +28,7 @@ class VideoViewSet(viewsets.ModelViewSet):
   filterset_class = VideoFilter
   authentication_classes = [JWTAuthentication]
   permission_classes = [IsAuthenticated]
-  # filter_fields = ('video_size','created_date')
+  filter_fields = ('video_size','created_date')
 
   # def perform_create(self, serializer):
   #   return super().perform_create(self, serializer)
